@@ -24,7 +24,6 @@ def get_db():
         raise RuntimeError("Render의 환경변수 DATABASE_URL을 설정해 주세요.")
     return psycopg.connect(
         DATABASE_URL, row_factory=dict_row, connect_timeout=15,
-        options="-c statement_timeout=15000",
     )
 
 
