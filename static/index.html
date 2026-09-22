@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SILENT SOONGSIL</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header>
+    <div><span class="pulse"></span> LIVE CAMPUS</div>
+    <h1>SILENT <b>SOONGSIL</b></h1>
+    <p>소음 측정값으로 공부하기 좋은 공간을 확인하세요.</p>
+  </header>
+  <main>
+    <section class="recommend" id="recommend" role="status">추천 공간을 분석하고 있습니다.</section>
+    <section class="layout">
+      <div class="panel">
+        <div class="section-title"><h2>공간 현황</h2><span id="updated">-</span></div>
+        <div id="location-list" class="location-list"></div>
+      </div>
+      <div class="panel chart-panel">
+        <div class="section-title"><h2 id="chart-title">시간대별 소음</h2><span>최근 12시간</span></div>
+        <p id="chart-message" class="meta" role="status"></p><div class="chart-wrap"><canvas id="noise-chart"></canvas></div>
+      </div>
+    </section>
+    <p class="legend"><i class="quiet"></i> 조용 &lt; 45 dB <i class="normal"></i> 보통 45 이상–65 미만 dB <i class="loud"></i> 시끄러움 ≥ 65 dB</p>
+  </main>
+</body>
+</html>
+

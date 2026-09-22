@@ -69,7 +69,7 @@ def row_to_dict(row):
 
 @app.route("/")
 def home():
-    return "ESP32 환경 모니터링 서버 정상 작동!"
+    return app.send_static_file("index.html")
 
 
 @app.route("/api/health", methods=["GET"])
