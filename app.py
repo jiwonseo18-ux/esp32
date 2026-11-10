@@ -37,7 +37,6 @@ def init_db():
                 location_id TEXT NOT NULL,
                 location_name TEXT NOT NULL,
                 db DOUBLE PRECISION NOT NULL,
-                lux DOUBLE PRECISION,
                 temperature DOUBLE PRECISION,
                 humidity DOUBLE PRECISION,
                 recorded_at TIMESTAMPTZ NOT NULL
@@ -62,6 +61,7 @@ def get_status(db):
 
 def row_to_dict(row):
     result = dict(row)
+    result.pop("lux", None)  # Older databases may still have this column.
     result["recorded_at"] = result["recorded_at"].astimezone(KST).isoformat(timespec="seconds")
     result["status"] = get_status(result["db"])
     return result
@@ -105,7 +105,7 @@ def readings():
             return jsonify({"error": f"{field}는 빈 문자열이 아니어야 합니다."}), 400
 
     values = {}
-    for field in ("db", "lux", "temperature", "humidity"):
+    for field in ("db", "temperature", "humidity"):
         value = data.get(field)
         if value is None and field != "db":
             values[field] = None
@@ -136,9 +136,9 @@ def readings():
             """
             INSERT INTO readings (
                 device_id, location_id, location_name, db,
-                lux, temperature, humidity, recorded_at
+                temperature, humidity, recorded_at
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             RETURNING *
             """,
             (
@@ -146,7 +146,6 @@ def readings():
                 data["location_id"],
                 data["location_name"],
                 round(values["db"], 1),
-                values["lux"],
                 values["temperature"],
                 values["humidity"],
                 recorded_at,
