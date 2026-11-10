@@ -149,6 +149,6 @@ async function refresh() {
   } catch(error) {
     $('#updated').textContent = '연결 재시도 중';
     $('#recommend').textContent = '서버에 연결하지 못했습니다. 표시된 값은 마지막 조회 결과이며 자동으로 재시도합니다.';
-  } finally {setTimeout(refresh,5000);}
+  } finally {setTimeout(refresh,2500);}
 }
 void refresh();
