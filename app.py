@@ -17,6 +17,7 @@ KST = timezone(timedelta(hours=9))
 
 QUIET_MAX_DB = 45.0
 NORMAL_MAX_DB = 65.0
+TEST_LOCATION_ID = "test-room"
 
 
 def get_db():
@@ -165,16 +166,21 @@ def locations():
             INNER JOIN (
                 SELECT location_id, MAX(id) AS latest_id
                 FROM readings
+                WHERE location_id <> %s
                 GROUP BY location_id
             ) latest ON r.id = latest.latest_id
             ORDER BY r.db ASC
-            """
+            """,
+            (TEST_LOCATION_ID,),
         ).fetchall()
     return jsonify([row_to_dict(row) for row in rows])
 
 
 @app.route("/api/history/<location_id>", methods=["GET"])
 def history(location_id):
+    if location_id == TEST_LOCATION_ID:
+        return jsonify([])
+
     try:
         hours = int(request.args.get("hours", 12))
     except ValueError:
@@ -205,10 +211,12 @@ def recommendation():
             INNER JOIN (
                 SELECT location_id, MAX(id) AS latest_id
                 FROM readings
+                WHERE location_id <> %s
                 GROUP BY location_id
             ) latest ON r.id = latest.latest_id
             ORDER BY r.db ASC
-            """
+            """,
+            (TEST_LOCATION_ID,),
         ).fetchall()
 
     if not rows:
